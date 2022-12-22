@@ -1,4 +1,4 @@
-from pydantic import BaseModel, validator, condecimal, Field
+from pydantic import BaseModel, validator, condecimal
 from datetime import date
 
 from core.config import decimal_max_digits, decimal_places
