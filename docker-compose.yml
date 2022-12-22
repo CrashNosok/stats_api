@@ -15,7 +15,7 @@ services:
   
   server:
     build: .
-    command: bash -c 'sleep 10 && cd ./app && uvicorn main:app --host 0.0.0.0'
+    command: bash -c 'while !</dev/tcp/postgres/5432; do sleep 1; done; cd ./app && uvicorn main:app --host 0.0.0.0'
     ports:
       - 8000:8000
     depends_on:
