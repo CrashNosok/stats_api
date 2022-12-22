@@ -15,10 +15,10 @@ def add_cpc_and_to_object(obj: StatsOutModel):
 
 class StatsRepository(BaseRepository):
     async def get_all(self,
-                    time_period: TimePeriod,
-                    sort_field: SortModel,
-                    limit: int,
-                    skip: int) -> list[StatsOutModel]:
+                      time_period: TimePeriod,
+                      sort_field: SortModel,
+                      limit: int,
+                      skip: int) -> list[StatsOutModel]:
         query = StatsDB.select()\
             .where(StatsDB.c.date.between(
                 time_period.from_, time_period.to))\
@@ -31,7 +31,6 @@ class StatsRepository(BaseRepository):
             add_cpc_and_to_object(obj=obj)
             result.append(obj)
         return sorted(result, key=lambda d: getattr(d, str(sort_field.value)))
-
 
     async def create(self, stats: StatsModel) -> StatsOutModel:
         select_query = StatsDB.select().where(StatsDB.c.date == stats.date)
@@ -50,7 +49,6 @@ class StatsRepository(BaseRepository):
         stats_out = StatsOutModel.parse_obj(stats)
         add_cpc_and_to_object(obj=stats_out)
         return stats_out
-
 
     async def remove_all(self) -> None:
         await self.database.execute(StatsDB.delete())

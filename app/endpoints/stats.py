@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends, status
-from fastapi.responses import JSONResponse
 
 from repositories.stats import StatsRepository
 from .depends import get_stats_repository
@@ -23,7 +22,7 @@ async def read_stats(
                     skip: int = 0,
                     stats_methods: StatsRepository = Depends(get_stats_repository)
                     ) -> list[StatsOut]:
-    '''
+    """
     Returns a sorted list of stats objects:
 
     - **sort_field**: by which field to sort objects
@@ -31,7 +30,7 @@ async def read_stats(
     - **skip**: how many stats objects to skip from the database before getting the set
     - **from_**: start date of the period (inclusive)
     - **to**: period end date (inclusive)
-    '''
+    """
     return await stats_methods.get_all(
         time_period=time_period,
         sort_field=sort_field,
@@ -49,14 +48,14 @@ async def read_stats(
 async def create_stats(stats: Stats,
                        stats_methods: StatsRepository = Depends(get_stats_repository)
                        ) -> StatsOut:
-    '''
+    """
     Create a stats item:
 
     - **date**: event date
     - **views**: tumber of impressions
     - **clicks**: tumber of clicks
     - **cost**: click cost
-    '''
+    """
     return await stats_methods.create(stats=stats)
 
 
@@ -66,8 +65,8 @@ async def create_stats(stats: Stats,
     status_code=status.HTTP_204_NO_CONTENT,
     summary='Removes all stats objects from the database',
 )
-async def remove_stats(stats_methods: StatsRepository = Depends(get_stats_repository)) -> JSONResponse:
-    '''
+async def remove_stats(stats_methods: StatsRepository = Depends(get_stats_repository)) -> None:
+    """
     Removes all stats objects from the database
-    '''
+    """
     await stats_methods.remove_all()
