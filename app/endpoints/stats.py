@@ -4,7 +4,7 @@ from datetime import date, datetime
 
 from repositories.stats import StatsRepository
 from .depends import get_stats_repository
-from models.stats import Stats, GetStatsParams, StatsOut, SortModel
+from models.stats import Stats, TimePeriod, StatsOut, SortModel
 
 
 router = APIRouter()
@@ -12,15 +12,14 @@ router = APIRouter()
 
 @router.get('/', response_model=list[StatsOut])
 async def read_stats(
-                    from_: date = Query(default=datetime.now().date(), alias='from'),
-                    to: date = Query(default=datetime.now().date()),
+                    time_period: TimePeriod = Depends(),
                     sort_field: SortModel = SortModel.date,
                     limit: int = 100,
                     skip: int = 0,
                     stats_methods: StatsRepository = Depends(get_stats_repository)
                     ) -> list[StatsOut]:
     return await stats_methods.get_all(
-        GetStatsParams(from_=from_, to=to), 
+        time_period=time_period,
         sort_field=sort_field,
         limit=limit, 
         skip=skip)

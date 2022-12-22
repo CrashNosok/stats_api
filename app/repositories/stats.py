@@ -1,6 +1,6 @@
 from models.stats import Stats as StatsModel,\
-                        GetStatsParams as GetStatsParamsModel,\
                         StatsOut as StatsOutModel,\
+                        TimePeriod,\
                         SortModel
 from db.stats import Stats as StatsDB
 from .base import BaseRepository
@@ -23,7 +23,7 @@ class StatsRepository(BaseRepository):
         await self.database.execute(query)
 
     async def get_all(self,
-                      time_period: GetStatsParamsModel,
+                      time_period: TimePeriod,
                       sort_field: SortModel,
                       limit: int,
                       skip: int) -> list[StatsOutModel]:

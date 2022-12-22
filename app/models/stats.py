@@ -1,8 +1,9 @@
-from pydantic import BaseModel, validator, condecimal
+from pydantic import BaseModel, validator, condecimal, Field
 from datetime import date
 
 from core.config import decimal_max_digits, decimal_places
 from enum import Enum
+from datetime import datetime
 
 
 class Stats(BaseModel):
@@ -43,14 +44,14 @@ class StatsOut(Stats):
         return round(v, 2)
 
 
-class GetStatsParams(BaseModel):
-    from_: date
-    to: date
+class TimePeriod(BaseModel):
+    from_: date = datetime.now().date()
+    to: date = datetime.now().date()
 
     @validator('to')
     def date_sequence_check(cls, to, values):
         if to < values['from_']:
-            raise ValueError('Dates should be in ascending order')
+            values['from_'] = to
         return to
 
 
